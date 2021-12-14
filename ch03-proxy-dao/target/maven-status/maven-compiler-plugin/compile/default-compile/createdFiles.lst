@@ -1,0 +1,3 @@
+com\bit\domain\Student.class
+com\bit\dao\StudentDao.class
+com\bit\utils\MyBatisUtils.class

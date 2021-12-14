@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bit.dao.StudentDao">
+
+    <!--定义sql的片段-->
+    <sql id="studentSql">
+        select id,name,age,email from student
+    </sql>
+    <!--if
+    <if:test="使用参数java对象的属性值作为判断条件,语法: 属性=XX值">
+    -->
+    <select id="selectStudentIf" resultType="com.bit.domain.Student">
+        <include refid="studentSql"/>
+        where 1=1
+        <if test="name !=null and name !='' ">
+            and name = #{name}
+        </if>
+        <if test="age>0">
+            or age>#{age}
+        </if>
+    </select>
+
+    <!--where的用法
+    <where> <if><if>...</where>
+    -->
+    <select id="selectStudentWhere" resultType="com.bit.domain.Student">
+        select id,name,age,email from student
+        <where>
+            <if test="name !=null and name !='' ">
+                name = #{name}
+            </if>
+            <if test="age>0">
+                or age>#{age}
+            </if>
+        </where>
+    </select>
+
+    <!--foreach使用1,List<Integer>
+    collection:表示接口中的方法参数类型，如果是数组就是array，如果是list集合使用list
+    item:自定义的表示数组或集合成员的变量(不是类型)
+    open:循环开始时的字符
+    close:循环结束时的字符
+    separator:集合成员之间的分隔符
+    -->
+    <select id="selectForeachOne" resultType="com.bit.domain.Student">
+        select * from student where id in
+        <foreach collection="list" item="myid" open="(" close=")" separator=",">
+            #{myid}
+        </foreach>
+    </select>
+<!--传对象-->
+    <select id="selectForeachTwo" resultType="com.bit.domain.Student">
+        select * from student where id in
+        <foreach collection="list" item="stu" open="(" close=")" separator=",">
+            #{stu.id}
+        </foreach>
+    </select>
+
+<!--    <select id="selectForeachTwo" resultType="com.bit.domain.Student">
+        select * from student where id in (
+        <foreach collection="list" item="stu">
+            #{stu.id},
+        </foreach>
+        -1)
+    </select>-->
+
+    <!--查询所有-->
+    <select id="selectAll" resultType="com.bit.domain.Student">
+        select * from student order by id
+    </select>
+</mapper>

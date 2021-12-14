@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!--指定properties文件的位置，从类路径根开始找文件-->
+    <properties resource="jdbc.properties" />
+    <settings>
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+
+
+    <!--定义别名-->
+    <typeAliases>
+        <!--可以指定一个类型一个自定义的别名-->
+        <!--type:自定义类型的全限定名称
+            alias:别名
+        -->
+<!--        <typeAlias type="com.bit.domain.Student" alias="stu" />
+        <typeAlias type="com.bit.vo.ViewStudent" alias="vstu" />-->
+
+        <!--第二种方式
+        name是包名，这个包中的所有类，类名就是别名（类名不区分大小写）-->
+        <package name="com.bit.domain"/>
+        <package name="com.bit.vo"/>
+    </typeAliases>
+
+    <!--配置插件-->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor" />
+    </plugins>
+
+    <environments default="mydev">
+        <environment id="mydev">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.drive}"/>
+                <property name="url"
+                          value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.user}"/>
+                <property name="password" value="${jdbc.passwd}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--指定sql映射文件位置 从类路径  target/clasess（类路径）-->
+    <mappers>
+        <!--第一种方式-->
+        <!--<mapper resource="com/bit/dao/StudentDao.xml"/>
+        <mapper resource="com/bit/dao/OrderDao.xml" />-->
+
+        <!--第二种方式
+        使用包名(xml文件所在包名)   可以写多个
+        这个包中的所有xml文件一次都能加载给mybatis
+        使用package的要求：
+        1.mapper文件名称需要和接口名称一样，区分大小写的一样
+        2.mapper文件和dao接口需要在同一目录
+        -->
+        <package name="com.bit.dao"/>
+    </mappers>
+</configuration>
